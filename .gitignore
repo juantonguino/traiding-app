@@ -1,0 +1,43 @@
+# ============================================
+# OpenCode
+# ============================================
+.opencode/node_modules/
+.opencode/package.json
+.opencode/package-lock.json
+.opencode/bun.lock
+
+# ============================================
+# Spec Kit (SDD)
+# ============================================
+.specify/extensions/.cache/
+.specify/extensions/.registry
+.specify/memory/.constitution-template.json
+
+# ============================================
+# Secrets & Environment
+# ============================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.crt
+
+# ============================================
+# Dependencies
+# ============================================
+node_modules/
+bower_components/
+
+# ============================================
+# Builds & Generated Artifacts
+# ============================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+coverage/
+*.log
+.DS_Store
