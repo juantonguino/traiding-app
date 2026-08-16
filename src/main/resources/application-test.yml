@@ -1,0 +1,7 @@
+trading:
+  binance:
+    stream-enabled: false
+  scheduling:
+    enabled: false
+  telegram:
+    enabled: false

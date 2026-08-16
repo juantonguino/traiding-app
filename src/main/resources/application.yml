@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: trading-signal-backend
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/trading_bot?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:trading}
+    password: ${DB_PASSWORD:trading}
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+trading:
+  trading-mode: ${TRADING_MODE:PAPER}
+  symbols: ${TRADING_SYMBOLS:BTCUSDT}
+  timeframe: ${TRADING_TIMEFRAME:15m}
+  strategy: sma-rsi
+  entry-notional-usdt: ${ENTRY_NOTIONAL_USDT:100}
+  fee-percent: 0.001
+  slippage-percent: 0.001
+  evaluation-interval-seconds: ${EVALUATION_INTERVAL_SECONDS:60}
+  binance:
+    ws-base-url: ${BINANCE_WS_BASE_URL:wss://stream.binance.com:9443}
+    rest-base-url: ${BINANCE_REST_BASE_URL:https://api.binance.com}
+    connect-timeout: 10s
+    reconnect-max-backoff: 60s
+    data-absence-window: ${DATA_ABSENCE_WINDOW:5m}
+  telegram:
+    enabled: ${TELEGRAM_ENABLED:true}
+    token: ${TELEGRAM_BOT_TOKEN:}
+    chat-id: ${TELEGRAM_CHAT_ID:}
+  summary:
+    cron: ${SUMMARY_CRON:0 0 0 * * *}
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.example.tradingbot: DEBUG
+  structured:
+    format:
+      console: logstash

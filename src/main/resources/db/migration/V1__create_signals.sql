@@ -1,0 +1,22 @@
+CREATE TABLE signals (
+    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+    signal_id          VARCHAR(36)  NOT NULL,
+    symbol             VARCHAR(20)  NOT NULL,
+    timeframe          VARCHAR(10)  NOT NULL,
+    side               VARCHAR(10)  NOT NULL,
+    price              DECIMAL(24,8) NOT NULL,
+    candle_open_time   TIMESTAMP(6) NOT NULL,
+    candle_close_time  TIMESTAMP(6) NOT NULL,
+    strategy           VARCHAR(50)  NOT NULL,
+    confidence         DECIMAL(5,2) NULL,
+    reason             VARCHAR(255) NOT NULL,
+    stop_loss          DECIMAL(24,8) NULL,
+    take_profit        DECIMAL(24,8) NULL,
+    status             VARCHAR(20)  NOT NULL,
+    ignore_reason      VARCHAR(50)  NULL,
+    open_trade_id      BIGINT       NULL,
+    created_at         TIMESTAMP(6) NOT NULL,
+    updated_at         TIMESTAMP(6) NOT NULL,
+    UNIQUE KEY idx_signals_id (signal_id),
+    UNIQUE KEY idx_signals_candle (symbol, timeframe, candle_open_time, strategy)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;

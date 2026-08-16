@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: trading-bot-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_NAME:-trading_bot}
+      MYSQL_USER: ${DB_USERNAME:-trading}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-trading}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trading-bot-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      TRADING_MODE: PAPER
+      DB_URL: jdbc:mysql://db:3306/${DB_NAME:-trading_bot}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: ${DB_USERNAME:-trading}
+      DB_PASSWORD: ${DB_PASSWORD:-trading}
+      TRADING_SYMBOLS: ${TRADING_SYMBOLS:-BTCUSDT}
+      TRADING_TIMEFRAME: ${TRADING_TIMEFRAME:-15m}
+      ENTRY_NOTIONAL_USDT: ${ENTRY_NOTIONAL_USDT:-100}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      TELEGRAM_ENABLED: ${TELEGRAM_ENABLED:-true}
+    ports:
+      - "8080:8080"
+
+volumes:
+  db-data:
