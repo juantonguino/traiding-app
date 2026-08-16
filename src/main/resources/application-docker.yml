@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:mysql://db:3306/trading_bot?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:trading}
+    password: ${DB_PASSWORD:trading}

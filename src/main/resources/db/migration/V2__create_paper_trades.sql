@@ -1,0 +1,36 @@
+CREATE TABLE paper_trades (
+    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+    trade_id           VARCHAR(36)   NOT NULL,
+    symbol             VARCHAR(20)   NOT NULL,
+    timeframe          VARCHAR(10)   NOT NULL,
+    strategy           VARCHAR(50)   NOT NULL,
+    quantity           DECIMAL(24,8) NOT NULL,
+    entry_price        DECIMAL(24,8) NOT NULL,
+    entry_notional     DECIMAL(24,8) NOT NULL,
+    open_time          TIMESTAMP(6)  NOT NULL,
+    open_signal_id     BIGINT        NOT NULL,
+    stop_loss          DECIMAL(24,8) NULL,
+    take_profit        DECIMAL(24,8) NULL,
+    status             VARCHAR(10)   NOT NULL,
+    open_guard         VARCHAR(20)   GENERATED ALWAYS AS (IF(status = 'OPEN', symbol, NULL)) STORED,
+    close_reason       VARCHAR(30)   NULL,
+    exit_price         DECIMAL(24,8) NULL,
+    close_time         TIMESTAMP(6)  NULL,
+    duration_seconds   BIGINT        NULL,
+    close_signal_id    BIGINT        NULL,
+    gross_pnl          DECIMAL(24,8) NULL,
+    fees               DECIMAL(24,8) NULL,
+    slippage_cost      DECIMAL(24,8) NULL,
+    net_pnl            DECIMAL(24,8) NULL,
+    return_pct         DECIMAL(12,4) NULL,
+    result             VARCHAR(12)   NULL,
+    created_at         TIMESTAMP(6)  NOT NULL,
+    updated_at         TIMESTAMP(6)  NOT NULL,
+    UNIQUE KEY idx_trades_id (trade_id),
+    UNIQUE KEY idx_trades_open_guard (open_guard),
+    CONSTRAINT fk_paper_trades_open_signal FOREIGN KEY (open_signal_id) REFERENCES signals (id),
+    CONSTRAINT fk_paper_trades_close_signal FOREIGN KEY (close_signal_id) REFERENCES signals (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE signals
+    ADD CONSTRAINT fk_signals_open_trade FOREIGN KEY (open_trade_id) REFERENCES paper_trades (id);

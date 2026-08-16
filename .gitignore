@@ -41,3 +41,25 @@ out/
 coverage/
 *.log
 .DS_Store
+
+# ============================================
+# Gradle / Kotlin / Java
+# ============================================
+.gradle/
+.idea/
+*.iml
+*.ipr
+*.iws
+*.class
+*.jar
+*.war
+*.kotlin_module
+!gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+
+# ============================================
+# Local environment
+# ============================================
+.env.local
+.env.*.local
